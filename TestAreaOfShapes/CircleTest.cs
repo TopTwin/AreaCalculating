@@ -53,6 +53,23 @@ namespace AreaCalculatingTest
         }
 
         /// <summary>
+        /// Тестирование ввода нуля в качестве значения стороны треугольника
+        /// </summary>
+        [Fact]
+        public void ZeroSidesTest()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(0, 4, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(5, 0, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(5, 4, 0));
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(0, 0, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(0, 4, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(5, 0, 0));
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(0, 0, 0));
+        }
+
+        /// <summary>
         /// Тестирование некорректного ввода одной из сторон, при которой треугольник не существует
         /// </summary>
         [Fact]

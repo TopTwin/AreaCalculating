@@ -84,6 +84,9 @@ namespace AreaCalculating
             if (firstSide < 0 || secondSide < 0 || thirdSide < 0)
                 throw new ArgumentOutOfRangeException("Сторона не может быть отрицательной");
 
+            if(firstSide == 0 || secondSide == 0 || thirdSide == 0)
+                throw new ArgumentOutOfRangeException("Сторона не может быть равна нулю");
+
             if (!IsTriangleExist())
             {
                 isTriangleExist = false;
