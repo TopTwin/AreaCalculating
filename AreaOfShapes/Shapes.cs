@@ -81,11 +81,7 @@ namespace AreaCalculating
         /// <exception cref="ArgumentException">Если введено некорректное значение стороны, при которой треугольник не существует</exception>
         public Triangle(double firstSide, double secondSide, double thirdSide)
         {
-            if (firstSide < 0 || secondSide < 0 || thirdSide < 0)
-                throw new ArgumentOutOfRangeException("Сторона не может быть отрицательной");
-
-            if(firstSide == 0 || secondSide == 0 || thirdSide == 0)
-                throw new ArgumentOutOfRangeException("Сторона не может быть равна нулю");
+            CheckingArgumets(firstSide, secondSide, thirdSide);
 
             if (!IsTriangleExist())
             {
@@ -117,6 +113,18 @@ namespace AreaCalculating
             side_C = thirdSide;
             area = GetArea();
         }
+        /// <summary>
+        /// Проверка корректного ввода аргументов
+        /// </summary>
+        private void CheckingArgumets(double firstSide, double secondSide, double thirdSide)
+        {
+            if (firstSide < 0 || secondSide < 0 || thirdSide < 0)
+                throw new ArgumentOutOfRangeException("Сторона не может быть отрицательной");
+
+            if (firstSide == 0 || secondSide == 0 || thirdSide == 0)
+                throw new ArgumentOutOfRangeException("Сторона не может быть равна нулю");
+        }
+
         /// <summary>
         /// Вычисление площади треугольника
         /// </summary>
