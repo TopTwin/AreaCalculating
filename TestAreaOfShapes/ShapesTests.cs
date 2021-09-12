@@ -5,7 +5,9 @@ using Xunit;
 
 namespace AreaCalculatingTest
 {
-    public class CircleTest
+    public class ShapesTests { }
+
+    public class CircleTests
     {
         /// <summary>
         /// Тестирование отрицательного радиуса круга
@@ -26,10 +28,12 @@ namespace AreaCalculatingTest
             Circle circle = new Circle(5);
 
             //Act
-            double area = circle.GetArea();
+            double area = circle.area;
+            double area2 = Circle.GetArea(5);
 
             //Assert
             Assert.Equal(78.53981633974483, area);
+            Assert.Equal(78.53981633974483, area2);
         }
     }
 
@@ -50,6 +54,17 @@ namespace AreaCalculatingTest
             Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle( 5,-4,-3));
 
             Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(-5,-4,-3));
+
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(-5, 4, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(5, -4, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(5, 4, -3));
+                                                                     
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(-5, -4, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(-5, 4, -3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(5, -4, -3));
+                                                                    
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(-5, -4, -3));
         }
 
         /// <summary>
@@ -67,6 +82,17 @@ namespace AreaCalculatingTest
             Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(5, 0, 0));
 
             Assert.Throws<ArgumentOutOfRangeException>(() => new Triangle(0, 0, 0));
+
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(0, 4, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(5, 0, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(5, 4, 0));
+                                                                     
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(0, 0, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(0, 4, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(5, 0, 0));
+                                                                     
+            Assert.Throws<ArgumentOutOfRangeException>(() => Triangle.GetArea(0, 0, 0));
         }
 
         /// <summary>
@@ -106,10 +132,12 @@ namespace AreaCalculatingTest
             Triangle triangle = new Triangle(2, 2, 2);
 
             //Act
-            var area = triangle.GetArea();
+            var area = triangle.area;
+            var area2 = Triangle.GetArea(3, 4, 5);
 
             //Assert
             Assert.Equal(1.7320508075688772, area);
+            Assert.Equal(6, area2);
         }
     }
 }

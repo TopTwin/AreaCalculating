@@ -4,12 +4,23 @@ namespace AreaCalculating
 {
     public abstract class Shape
     {
-        protected double area;
-
         /// <summary>
         /// Площадь фигуры
         /// </summary>
-        abstract public double GetArea();
+        public double area { get; protected set; }
+
+        //Проверка аргументов на отрицательность и ноль
+        static protected void CheckingForNegativityAndZero(params double[] arguments)
+        {
+            for(int i = 0; i < arguments.Length; i++)
+            {
+                if(arguments[i] < 0)
+                    throw new ArgumentOutOfRangeException("Значение не может быть отрицательным");
+
+                if(arguments[i] == 0)
+                    throw new ArgumentOutOfRangeException("Значение не может быть равно нулю");
+            }
+        }
     }
     public class Circle : Shape
     {
@@ -25,20 +36,26 @@ namespace AreaCalculating
         /// <exception cref="ArgumentOutOfRangeException">Если радиус имеет отрицательное значение</exception>
         public Circle(double rad)
         {
-            if (rad < 0)
-                throw new ArgumentOutOfRangeException("Радиус не может быть отрицательным");
+            if(rad < 0)
+               throw new ArgumentOutOfRangeException("Значение не может быть отрицательным");
 
             radius = rad;
-            area = GetArea();
+            area = GetArea(rad);
         }
 
         /// <summary>
         /// Вычисление площади круга
         /// </summary>
-        public override double GetArea()
+        /// <param name="rad">Радиус</param>
+        /// <returns>Площадь круга</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Если радиус имеет отрицательное значение</exception>
+        public static double GetArea(double rad)
         {
+            if (rad < 0)
+                throw new ArgumentOutOfRangeException("Значение не может быть отрицательным");
+
             //Вычисление площади круга
-            double result = radius * radius * Math.PI;
+            double result = rad * rad * Math.PI;
             return result;
         }
     }
@@ -81,9 +98,9 @@ namespace AreaCalculating
         /// <exception cref="ArgumentException">Если введено некорректное значение стороны, при которой треугольник не существует</exception>
         public Triangle(double firstSide, double secondSide, double thirdSide)
         {
-            CheckingArgumets(firstSide, secondSide, thirdSide);
+            CheckingForNegativityAndZero(firstSide, secondSide, thirdSide);
 
-            if (!IsTriangleExist())
+            if (!IsTriangleExist(firstSide, secondSide, thirdSide))
             {
                 isTriangleExist = false;
                 switch (SearchIncorrectSide(firstSide, secondSide, thirdSide))
@@ -111,49 +128,59 @@ namespace AreaCalculating
             side_A = firstSide;
             side_B = secondSide;
             side_C = thirdSide;
-            area = GetArea();
+            area = GetArea(firstSide, secondSide, thirdSide);
         }
-        /// <summary>
-        /// Проверка корректного ввода аргументов
-        /// </summary>
-        private void CheckingArgumets(double firstSide, double secondSide, double thirdSide)
-        {
-            if (firstSide < 0 || secondSide < 0 || thirdSide < 0)
-                throw new ArgumentOutOfRangeException("Сторона не может быть отрицательной");
-
-            if (firstSide == 0 || secondSide == 0 || thirdSide == 0)
-                throw new ArgumentOutOfRangeException("Сторона не может быть равна нулю");
-        }
-
+        
         /// <summary>
         /// Вычисление площади треугольника
         /// </summary>
-        public override double GetArea()
+        /// <param name="firstSide">Первая сторона треугольника</param>
+        /// <param name="secondSide">Вторая сторона треугольника</param>
+        /// <param name="thirdSide">Третья сторона треугольника</param>
+        /// <returns>Площадь треугольника</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Если сторона треугольника имеет отрицательное значение</exception>
+        /// <exception cref="ArgumentException">Если введено некорректное значение стороны, при которой треугольник не существует</exception>
+        public static double GetArea(double firstSide, double secondSide, double thirdSide)
         {
+            CheckingForNegativityAndZero(firstSide, secondSide, thirdSide);
+
+            if (!IsTriangleExist(firstSide, secondSide, thirdSide))
+            {
+                switch (SearchIncorrectSide(firstSide, secondSide, thirdSide))
+                {
+                    //Первая сторона треугольника
+                    case 1:
+                        throw new ArgumentException("Введена некорректная сторона, при которой треугольник не существует", nameof(firstSide));
+                    //Вторая сторона треугольника
+                    case 2:
+                        throw new ArgumentException("Введена некорректная сторона, при которой треугольник не существует", nameof(secondSide));
+                    //Третья сторона треугольника
+                    case 3:
+                        throw new ArgumentException("Введена некорректная сторона, при которой треугольник не существует", nameof(thirdSide));
+                }
+            }
             //Вычисление полупериметра
-            double p = (side_A + side_B + side_C) / 2;
+            double p = (firstSide + secondSide + thirdSide) / 2;
 
             //Вычисление площади треугольника по формуле Герона
-            double result = Math.Sqrt(p * (p - side_A) * (p - side_B) * (p - side_C));
+            double result = Math.Sqrt(p * (p - firstSide) * (p - secondSide) * (p - thirdSide));
             return result;
         }
-        /// <summary>
-        /// Проверка существования треугольника
-        /// </summary>
-        private bool IsTriangleExist()
+        
+        // Проверка существования треугольника
+        static private bool IsTriangleExist(double firstSide, double secondSide, double thirdSide)
         {
-            if (side_A + side_B > side_C &&
-                side_A + side_C > side_B &&
-                side_B + side_C > side_A)
+            if (firstSide + secondSide > thirdSide &&
+                firstSide + thirdSide > secondSide &&
+                secondSide + thirdSide > firstSide)
 
                 return true;
             else
                 return false;
         }
-        /// <summary>
-        /// Поиск некорректной стороны
-        /// </summary>
-        private int SearchIncorrectSide(double firstSide, double secondSide, double thirdSide)
+        
+        // Поиск некорректной стороны
+        static private int SearchIncorrectSide(double firstSide, double secondSide, double thirdSide)
         {
             if (secondSide + thirdSide < firstSide)
                 return 1;
@@ -163,9 +190,8 @@ namespace AreaCalculating
                 return 3;
             return 0;
         }
-        /// <summary>
-        /// Проверка, является ли треугольник прямоугольным
-        /// </summary>
+        
+        // Проверка, является ли треугольник прямоугольным
         private bool IsTriangleRightAngled()
         {
             //Находим наибольшую сторону
