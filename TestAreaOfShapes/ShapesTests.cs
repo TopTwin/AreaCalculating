@@ -28,7 +28,7 @@ namespace AreaCalculatingTest
             Circle circle = new Circle(5);
 
             //Act
-            double area = circle.area;
+            double area = circle._area;
             double area2 = Circle.GetArea(5);
 
             //Assert
@@ -132,7 +132,7 @@ namespace AreaCalculatingTest
             Triangle triangle = new Triangle(2, 2, 2);
 
             //Act
-            var area = triangle.area;
+            var area = triangle._area;
             var area2 = Triangle.GetArea(3, 4, 5);
 
             //Assert
