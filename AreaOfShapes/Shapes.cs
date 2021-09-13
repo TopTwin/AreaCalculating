@@ -160,6 +160,7 @@ namespace AreaCalculating
         }
         
         // Поиск некорректной стороны
+        /// <returns>Возвращает номер некорректной стороны</returns>
         static private int SearchIncorrectSide(double firstSide, double secondSide, double thirdSide)
         {
             if (secondSide + thirdSide < firstSide)
